@@ -57,7 +57,7 @@ public class FetchFitbitActivities implements CustomCodeMethod {
   @Override
   public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
       logger = serviceProvider.getLoggerService(FetchFitbitActivities.class);
-      logger.debug("get fitbit activities ------------------------------");
+      logger.debug("fetch fitbit activities ------------------------------");
 
       String stackmobUserID = request.getParams().get("stackmob_user_id");
       String startDateStr = request.getParams().get("start_date");
@@ -97,6 +97,8 @@ public class FetchFitbitActivities implements CustomCodeMethod {
       //LocalDate today = new LocalDate(DateTimeZone.forTimeZone(tz));
       //LocalDate today = new LocalDate(DateTimeZone.forTimeZone(tz));
       //LocalDate yesterday = today.minusDays(1);
+      int addedCount = 0;
+      int updatedCount = 0;
 
       logger.debug("entering date loop " + startDate.toString() + " end: " + endDate.toString());
       for (LocalDate date = startDate; date.isBefore(endDate) || date.isEqual(endDate); date = date.plusDays(1))
@@ -133,6 +135,8 @@ public class FetchFitbitActivities implements CustomCodeMethod {
           query.add(new SMEquals("theusername", new SMString(stackmobUserID)));
           query.add(new SMEquals("activity_date", new SMInt(millis)));
 
+
+
           // execute the query
           try {
               logger.debug("looking up activities");
@@ -160,6 +164,7 @@ public class FetchFitbitActivities implements CustomCodeMethod {
                   logger.debug("update object");
                   dataService.updateObject("activity", activityId, update);
                   logger.debug("updated object");
+                  updatedCount++;
               }
               else {
                   Map<String, SMValue> activityMap = new HashMap<String, SMValue>();
@@ -180,6 +185,8 @@ public class FetchFitbitActivities implements CustomCodeMethod {
                   logger.debug("created object");
                   activityId = activityObject.getValue().get("activity_id");
                   newActivity = true;
+                  addedCount++;
+
               }
 
           } catch (InvalidSchemaException e) {
@@ -202,7 +209,8 @@ public class FetchFitbitActivities implements CustomCodeMethod {
           }
       }
       Map<String, Object> returnMap = new HashMap<String, Object>();
-      returnMap.put("success?", "think so");
+      returnMap.put("days of activities updated", updatedCount);
+      returnMap.put("days of activities added", addedCount);
 //      returnMap.put("activity_id", activityId);
 //      returnMap.put("newActivity", newActivity);
       //returnMap.put("activitiesJson", activities);
