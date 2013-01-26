@@ -157,7 +157,11 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
                       List<SMUpdate> update = new ArrayList<SMUpdate>();
                       update.add(new SMSet("active_score", new SMInt((long)summary.getActiveScore())));
                       update.add(new SMSet("steps", new SMInt((long)summary.getSteps())));
-                      update.add(new SMSet("floors", new SMInt((long)summary.getFloors())));
+                      long floors = 0;
+                      if (summary.getFloors() != null) { // uh, great work there fitbit api, floors can be null
+                          floors = (long) summary.getFloors();
+                      }
+                      update.add("floors", new SMInt(floors));
                       update.add(new SMSet("sedentary_minutes", new SMInt((long)summary.getSedentaryMinutes())));
                       update.add(new SMSet("lightly_active_minutes", new SMInt((long)summary.getLightlyActiveMinutes())));
                       update.add(new SMSet("fairly_active_minutes", new SMInt((long)summary.getFairlyActiveMinutes())));
