@@ -29,7 +29,6 @@ import com.stackmob.core.rest.ResponseToProcess;
 import com.stackmob.sdkapi.*;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -40,14 +39,14 @@ import java.net.HttpURLConnection;
 import java.util.*;
 
 
-public class FetchFitbitActivities implements CustomCodeMethod {
+public class UpdateFitbitActivities implements CustomCodeMethod {
 
 
     private static LoggerService logger;
 
     @Override
   public String getMethodName() {
-    return "fetch_fitbit_activities";
+    return "update_fitbit_activities";
   }
 
   @Override
@@ -58,8 +57,8 @@ public class FetchFitbitActivities implements CustomCodeMethod {
 
   @Override
   public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
-      logger = serviceProvider.getLoggerService(FetchFitbitActivities.class);
-      logger.debug("fetch fitbit activities ------------------------------");
+      logger = serviceProvider.getLoggerService(UpdateFitbitActivities.class);
+      logger.debug("update fitbit activities ------------------------------");
 
       String stackmobUserID = request.getParams().get("stackmob_user_id");
       String startDateStr = request.getParams().get("start_date");
@@ -176,7 +175,11 @@ public class FetchFitbitActivities implements CustomCodeMethod {
                       activityMap.put("activity_date_str", new SMString(date.toString()));
                       activityMap.put("active_score", new SMInt((long) summary.getActiveScore()));
                       activityMap.put("steps", new SMInt((long) summary.getSteps()));
-                      activityMap.put("floors", new SMInt((long) summary.getFloors()));
+                      long floors = 0;
+                      if (summary.getFloors() != null) { // uh, great work there fitbit api, floors can be null
+                          floors = (long) summary.getFloors();
+                      }
+                      activityMap.put("floors", new SMInt(floors));
                       activityMap.put("sedentary_minutes", new SMInt((long) summary.getSedentaryMinutes()));
                       activityMap.put("lightly_active_minutes", new SMInt((long) summary.getLightlyActiveMinutes()));
                       activityMap.put("fairly_active_minutes", new SMInt((long) summary.getFairlyActiveMinutes()));

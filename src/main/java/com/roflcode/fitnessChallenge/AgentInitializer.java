@@ -1,6 +1,5 @@
 package com.roflcode.fitnessChallenge;
 
-import com.fitbit.api.FitbitAPIException;
 import com.fitbit.api.client.*;
 import com.fitbit.api.client.service.FitbitAPIClientService;
 import com.fitbit.api.model.APIResourceCredentials;
@@ -82,7 +81,7 @@ public class AgentInitializer {
 
     public static FitbitApiClientAgent GetInitializedAgent(SDKServiceProvider serviceProvider, String stackmobUserID) {
 
-        logger = serviceProvider.getLoggerService(FetchFitbitActivities.class);
+        logger = serviceProvider.getLoggerService(UpdateFitbitActivities.class);
         FitbitAPIClientService service = null;
         FitbitApiClientAgent agent = null;
 //        return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errMap); // http 500 - internal server error
