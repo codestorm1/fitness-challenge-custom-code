@@ -201,12 +201,13 @@ public class FetchFitbitActivities implements CustomCodeMethod {
               errMap.put("detail", e.toString());
               return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errMap); // http 500 - internal server error
           }
-          catch(Exception e) {
-              HashMap<String, String> errMap = new HashMap<String, String>();
-              errMap.put("error", "unknown");
-              errMap.put("detail", e.toString());
-              return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errMap); // http 500 - internal server error
-          }
+//          catch(Exception e) {
+//              HashMap<String, String> errMap = new HashMap<String, String>();
+//              errMap.put("error", "unknown");
+//              errMap.put("detail", e.toString());
+//              throw e;
+//              return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errMap); // http 500 - internal server error
+//          }
       }
       Map<String, Object> returnMap = new HashMap<String, Object>();
       returnMap.put("days of activities updated", updatedCount);
