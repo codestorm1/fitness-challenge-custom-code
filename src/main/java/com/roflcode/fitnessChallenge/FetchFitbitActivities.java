@@ -34,6 +34,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.util.*;
 
@@ -205,7 +207,10 @@ public class FetchFitbitActivities implements CustomCodeMethod {
               catch(Exception e) {
                   HashMap<String, String> errMap = new HashMap<String, String>();
                   errMap.put("error", "unknown");
-                  errMap.put("detail", e.toString());
+                  StringWriter errors = new StringWriter();
+                  e.printStackTrace(new PrintWriter(errors));
+
+                  errMap.put("detail", errors.toString());
                   return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errMap); // http 500 - internal server error
               }
           }
