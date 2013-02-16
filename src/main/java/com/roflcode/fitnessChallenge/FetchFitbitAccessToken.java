@@ -91,6 +91,8 @@ public class FetchFitbitAccessToken implements CustomCodeMethod {
           FitbitApiEntityCacheMapImpl entityCache = new FitbitApiEntityCacheMapImpl();
           FitbitApiSubscriptionStorageInMemoryImpl subscriptionStore = new FitbitApiSubscriptionStorageInMemoryImpl();
           String fitnessCallback = serviceProvider.isSandbox() ? devFitnessChallengeBaseUrl : prodFitnessChallengeBaseUrl;
+          Boolean isSand = serviceProvider.isSandbox();
+          logger.debug("is sandbox? " + isSand.toString() + "callback is " + fitnessCallback);
           agent = new FitbitApiClientAgent(apiBaseUrl, fitnessCallback, credCache, serviceProvider);
           FitbitAPIClientService service = new FitbitAPIClientService(agent, clientConsumerKey, clientSecret,
                   credCache, entityCache, subscriptionStore); // need this call to set oauth internally in the service
