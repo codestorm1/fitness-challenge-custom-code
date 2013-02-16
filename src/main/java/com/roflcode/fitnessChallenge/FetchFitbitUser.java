@@ -42,8 +42,8 @@ public class FetchFitbitUser implements CustomCodeMethod {
 
     private static final String fitbitSiteBaseUrl = "http://www.fitbit.com";
     private static final String apiBaseUrl = "api.fitbit.com";
-    //private static final String fitnessChallengeBaseUrl = "http://localhost:4567";
-    private static final String fitnessChallengeBaseUrl = "http://fitnesschallenge.twistedogregmailcom.stackmobapp.com";
+    private static final String devFitnessChallengeBaseUrl = "http://localhost:4567";
+    private static final String prodFitnessChallengeBaseUrl = "http://fitnesschallenge.twistedogregmailcom.stackmobapp.com";
 
     private static final String clientConsumerKey = "c472de74290e435caa6b6829ff68b9aa";
     private static final String clientSecret = "312f9d3f9d10418bb43938103a73d5fe";
@@ -91,7 +91,8 @@ public class FetchFitbitUser implements CustomCodeMethod {
           FitbitApiCredentialsCache credCache = new FitbitApiCredentialsCacheMapImpl();
           FitbitApiEntityCacheMapImpl entityCache = new FitbitApiEntityCacheMapImpl();
           FitbitApiSubscriptionStorageInMemoryImpl subscriptionStore = new FitbitApiSubscriptionStorageInMemoryImpl();
-          agent = new FitbitApiClientAgent(apiBaseUrl, fitnessChallengeBaseUrl, credCache, serviceProvider);
+          String fitnessCallback = serviceProvider.isSandbox() ? devFitnessChallengeBaseUrl : prodFitnessChallengeBaseUrl;
+          agent = new FitbitApiClientAgent(apiBaseUrl, fitnessCallback, credCache, serviceProvider);
           service = new FitbitAPIClientService(agent, clientConsumerKey, clientSecret,
                   credCache, entityCache, subscriptionStore); // need this call to set oauth internally in the service
 
