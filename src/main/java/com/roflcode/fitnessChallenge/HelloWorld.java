@@ -49,7 +49,10 @@ public class HelloWorld implements CustomCodeMethod {
   public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
     Map<String, Object> map = new HashMap<String, Object>();
     String test = request.getParams().get("test");
-    map.put("msg", "Hello, " + test + "'s world!");
+
+    Boolean sandbox = serviceProvider.isSandbox();
+
+      map.put("msg", "Hello, " + test + "'s world!  is sandbox? " + sandbox.toString());
     return new ResponseToProcess(HttpURLConnection.HTTP_OK, map);
   }
 
