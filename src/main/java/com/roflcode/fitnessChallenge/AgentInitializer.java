@@ -95,7 +95,7 @@ public class AgentInitializer {
             FitbitApiSubscriptionStorageInMemoryImpl subscriptionStore = new FitbitApiSubscriptionStorageInMemoryImpl();
             String fitnessCallback = serviceProvider.isSandbox() ? devFitnessChallengeBaseUrl : prodFitnessChallengeBaseUrl;
             Boolean isSand = serviceProvider.isSandbox();
-            logger.debug("is sandbox? " + isSand.toString() + "callback is " + fitnessCallback);
+            logger.debug("is sandbox? " + isSand.toString() + ".  Callback is " + fitnessCallback);
             agent = new FitbitApiClientAgent(apiBaseUrl, fitnessCallback, credCache, serviceProvider);
             service = new FitbitAPIClientService(agent, clientConsumerKey, clientSecret,
                     credCache, entityCache, subscriptionStore); // need this call to set oauth internally in the service
