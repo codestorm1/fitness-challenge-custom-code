@@ -6,3 +6,11 @@
 *.class
 
 target/classes/com/roflcode/fitnessChallenge/AgentInitializer.class
+
+*.class
+
+*.class
+
+out/.DS_Store
+
+out/production/.DS_Store

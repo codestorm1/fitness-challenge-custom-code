@@ -66,12 +66,11 @@ public class UpdateChallengeLeaders implements CustomCodeMethod {
       }
 
       ChallengeLeaders challengeLeaders = new ChallengeLeaders();
-      challengeLeaders.UpdateLeaders(stackmobUserID, serviceProvider);
+      String result = challengeLeaders.UpdateLeaders(stackmobUserID, serviceProvider);
 
 
       Map<String, Object> returnMap = new HashMap<String, Object>();
-      returnMap.put("?", 0);
-      returnMap.put("??", 0);
+      returnMap.put("result", result);
 
       logger.debug("completed leader update");
       return new ResponseToProcess(HttpURLConnection.HTTP_OK, returnMap);

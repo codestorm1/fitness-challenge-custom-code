@@ -134,7 +134,7 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
 
               // build a query
               query = new ArrayList<SMCondition>();
-              query.add(new SMEquals("theusername", new SMString(stackmobUserID)));
+              query.add(new SMEquals("user", new SMString(stackmobUserID)));
               query.add(new SMEquals("activity_date", new SMInt(millis)));
 
 
@@ -174,7 +174,7 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
                   }
                   else {
                       Map<String, SMValue> activityMap = new HashMap<String, SMValue>();
-                      activityMap.put("theusername", new SMString(stackmobUserID));
+                      activityMap.put("user", new SMString(stackmobUserID));
                       activityMap.put("activity_date", new SMInt(millis));
                       activityMap.put("activity_date_str", new SMString(date.toString()));
                       activityMap.put("active_score", new SMInt((long) summary.getActiveScore()));
