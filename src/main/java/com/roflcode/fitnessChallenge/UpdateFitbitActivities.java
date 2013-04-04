@@ -38,6 +38,7 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.util.*;
 
+import com.roflcode.fitnessChallenge.ChallengeLeaders;
 
 public class UpdateFitbitActivities implements CustomCodeMethod {
 
@@ -225,6 +226,10 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
       Map<String, Object> returnMap = new HashMap<String, Object>();
       returnMap.put("days of activities updated", updatedCount);
       returnMap.put("days of activities added", addedCount);
+
+      ChallengeLeaders leaders = new ChallengeLeaders();
+      leaders.UpdateLeaders(stackmobUserID, serviceProvider);
+
 //      returnMap.put("activity_id", activityId);
 //      returnMap.put("newActivity", newActivity);
       //returnMap.put("activitiesJson", activities);
