@@ -14,3 +14,19 @@ target/classes/com/roflcode/fitnessChallenge/AgentInitializer.class
 out/.DS_Store
 
 out/production/.DS_Store
+
+*.class
+
+target/classes/com/fitbit/api/client/http/HttpClientStackMob$1.class
+
+target/classes/com/fitbit/api/client/http/HttpClientStackMob.class
+
+target/classes/com/fitbit/api/client/http/HttpClientStackMob.class
+
+target/classes/com/roflcode/fitnessChallenge/EntryPointExtender.class
+
+target/classes/com/roflcode/fitnessChallenge/FetchFitbitAccessToken.class
+
+target/classes/com/fitbit/api/client/http/HttpClientStackMob$HttpMethod.class
+
+target/classes/com/fitbit/api/client/FitbitApiClientAgent.class

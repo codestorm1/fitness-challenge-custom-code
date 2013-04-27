@@ -35,8 +35,10 @@ import com.stackmob.sdkapi.LoggerService;
 import com.stackmob.sdkapi.SDKServiceProvider;
 import com.stackmob.sdkapi.http.HttpService;
 import com.stackmob.sdkapi.http.Header;
+import com.stackmob.sdkapi.http.request.DeleteRequest;
 import com.stackmob.sdkapi.http.request.GetRequest;
 import com.stackmob.sdkapi.http.request.PostRequest;
+import com.stackmob.sdkapi.http.request.PutRequest;
 import com.stackmob.sdkapi.http.response.HttpResponse;
 
 //import org.apache.commons.logging.Log;
@@ -50,10 +52,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.net.Proxy.Type;
 import java.security.AccessControlException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A utility class to handle HTTP request/response.
@@ -471,9 +470,12 @@ public class HttpClientStackMob implements Serializable {
                 headers.add(new Header("User-Agent", "fitbitAPIClient http://wiki.fitbit.com/Fitbit-API-Java-Client /1"));
 
                 String postParam = null;
-                if (postParams != null) {
+                if (method == HttpMethod.POST) {
                     Header header = new Header("Content-Type", "application/x-www-form-urlencoded");
                     headers.add(header);
+                    if (postParams == null) {
+                        postParams = PostParameter.EMPTY_ARRAY;
+                    }
                     postParam = encodeParameters(postParams);
                     byte[] bytes = postParam.getBytes("UTF-8");
                     header = new com.stackmob.sdkapi.http.Header("Content-Length", Integer.toString(bytes.length));
@@ -497,17 +499,26 @@ public class HttpClientStackMob implements Serializable {
                     if (method == HttpMethod.POST) {
                         PostRequest req = new PostRequest(url, headers, postParam);
                         httpResponse = httpService.post(req);
-                    } else
-                    if (method == HttpMethod.GET) {
+                    }
+                    else if (method == HttpMethod.PUT) {
+                        PutRequest putReq = new PutRequest(url, headers, postParam);
+                        httpResponse = httpService.put(putReq);
+                    }
+                    else if (method == HttpMethod.GET) {
                         GetRequest getReq = new GetRequest(url, headers);
                         httpResponse = httpService.get(getReq);
                     }
+                    else if (method == HttpMethod.DELETE) {
+                        DeleteRequest delReq = new DeleteRequest(url, headers);
+                        httpResponse = httpService.delete(delReq);
+                    }
+
                     if (httpResponse == null) {
                         throw new FitbitAPIException("null response wtf");
                     }
                 }
                 catch (Exception ex) {
-                    log.error("access denied or timeout during http request", ex);
+                    log.error("null httpresponse: access denied or timeout during http request", ex);
                 }
 
 //                    if (log.isDebugEnabled()){
@@ -528,12 +539,20 @@ public class HttpClientStackMob implements Serializable {
                 responseCode = httpResponse.getCode();
                 if (responseCode >= 200 && responseCode < 300) {
                     log.debug("successful request");
-                    log.debug("response: " + httpResponse.getBody() + " headers: " + httpResponse.getHeaders());
+                    String headersText = "";
+                    Set<Header> responseHeaders = httpResponse.getHeaders();
+
+                    for (Header header: responseHeaders) {
+                        headersText += header.getName() + " " + header.getValue() + " ";
+                    }
+                    log.debug("response: " + httpResponse.getBody() + " headers: " + headersText);
                     break;
                 } else {
                     if (responseCode < INTERNAL_SERVER_ERROR || retriedCount == retryCount) {
                         log.warn("response code: " + responseCode + " retried: " + retriedCount);
-                        throw new FitbitAPIException(getCause(responseCode), response);
+                        log.warn(httpResponse.getBody());
+                        throw new FitbitAPIException(httpResponse.getBody(), responseCode);
+//                        throw new FitbitAPIException(getCause(responseCode), response);
                     }
                     // will retry if the status code is INTERNAL_SERVER_ERROR
                 }

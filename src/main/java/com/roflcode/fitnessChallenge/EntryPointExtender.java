@@ -34,6 +34,7 @@ public class EntryPointExtender extends JarEntryObject {
     list.add(new FetchFitbitFriends());
     list.add(new UpdateFitbitActivities());
     list.add(new UpdateChallengeLeaders());
+    list.add(new AddFitbitSubscription());
     return list;
   }
 

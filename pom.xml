@@ -23,7 +23,7 @@
   <groupId>com.roflcode</groupId>
   <artifactId>fitnessChallenge</artifactId>
     <packaging>jar</packaging>
-  <version>0.7</version>
+  <version>0.8</version>
  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

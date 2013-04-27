@@ -2560,13 +2560,48 @@ public class FitbitApiClientAgent extends FitbitAPIClientSupport implements Seri
         setSubscriberId(subscriberId);
 
         try {
-            return new SubscriptionDetail(httpPost(url, null, true).asJSONObject());
+            JSONObject jsonObject = httpPost(url, null, true).asJSONObject();
+            return new SubscriptionDetail(jsonObject);
         } catch (FitbitAPIException e) {
             throw e;
         } catch (Exception e) {
             throw new FitbitAPIException("Could not create subscription: " + e, e);
         }
     }
+
+    public SubscriptionDetail nullSafeSubscribeLog(LoggerService logger, String subscriberId, LocalUserDetail localUser, FitbitUser fitbitUser, APICollectionType collectionType, String subscriptionId) throws FitbitAPIException {
+        logger.debug("in null safe sub log");
+        setAccessToken(localUser);
+
+        String url =
+                APIUtil.constructFullSubscriptionUrl(
+                        getApiBaseUrl(),
+                        getApiVersion(),
+                        fitbitUser,
+                        collectionType,
+                        null == subscriptionId ? APIUtil.UNSPECIFIED_SUBSCRIPTION_ID : subscriptionId,
+                        APIFormat.JSON
+                );
+        setSubscriberId(subscriberId);
+        logger.debug("the url: " + url);
+        //http://api.fitbit.com/1/user/23FR8C/apiSubscriptions/1.json
+        try {
+            Response response = httpPost(url, null, true);
+
+            logger.debug(String.format("response code: %d %s", response.getStatusCode(), response.asString()));
+            JSONObject jsonObject = response.asJSONObject();
+            if (jsonObject.isNull("subscriberId")) {
+                jsonObject.append("subscriberId", "none");
+            }
+            logger.debug("the json: " + jsonObject.toString());
+            return new SubscriptionDetail(jsonObject);
+        } catch (FitbitAPIException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new FitbitAPIException("Could not create subscription: " + e, e);
+        }
+    }
+
 
     protected void nullSafeUnsubscribe(String subscriberId, LocalUserDetail localUser, FitbitUser fitbitUser, APICollectionType collectionType, String subscriptionId) throws FitbitAPIException {
         setAccessToken(localUser);

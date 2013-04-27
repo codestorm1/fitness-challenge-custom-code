@@ -55,7 +55,6 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
     return Arrays.asList("stackmob_user_id", "start_date", "end_date");
   }
 
-
   @Override
   public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
       logger = serviceProvider.getLoggerService(UpdateFitbitActivities.class);
@@ -64,13 +63,14 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
       String stackmobUserID = request.getParams().get("stackmob_user_id");
       String startDateStr = request.getParams().get("start_date");
       String endDateStr = request.getParams().get("end_date");
-      if (endDateStr == "") {
+      if (endDateStr == null || endDateStr == "") {
           endDateStr = startDateStr;
       }
 
       if (stackmobUserID == null || stackmobUserID.isEmpty()) {
           HashMap<String, String> errParams = new HashMap<String, String>();
           errParams.put("error", "stackmobUserID was empty or null");
+          logger.error("bad request, mising stackmob user ID");
           return new ResponseToProcess(HttpURLConnection.HTTP_BAD_REQUEST, errParams); // http 400 - bad request
       }
 
@@ -78,7 +78,8 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
       if (agent == null) {
           HashMap<String, String> errParams = new HashMap<String, String>();
           errParams.put("error", "could not initialize fitbit client agent");
-          return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errParams); // http 500 internal error
+          logger.error("could not initialize fitbit client agent");
+          return new ResponseToProcess(HttpURLConnection.HTTP_INTERNAL_ERROR, errParams); // http 500 internal error;
       }
 
 
@@ -89,7 +90,7 @@ public class UpdateFitbitActivities implements CustomCodeMethod {
       //LocalDate today = new LocalDate(DateTimeZone.UTC);
 
 
-      DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+      DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
       DateTime dt = formatter.parseDateTime(startDateStr);
       LocalDate startDate = new LocalDate(dt);
       dt = formatter.parseDateTime(endDateStr);

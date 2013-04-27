@@ -62,7 +62,6 @@ public class FetchFitbitAccessToken implements CustomCodeMethod {
       String tempTokenSecret = request.getParams().get("request_token_secret");
       String tempTokenVerifier = request.getParams().get("oauth_verifier");
 
-
       logger.debug(String.format("Fetching access token using token: %s secret: %s verifier: %s", tempTokenReceived, tempTokenSecret, tempTokenVerifier));
 
       Map<String, Object> map = new HashMap<String, Object>();
