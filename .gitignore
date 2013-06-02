@@ -30,3 +30,5 @@ target/classes/com/roflcode/fitnessChallenge/FetchFitbitAccessToken.class
 target/classes/com/fitbit/api/client/http/HttpClientStackMob$HttpMethod.class
 
 target/classes/com/fitbit/api/client/FitbitApiClientAgent.class
+
+target/fitnessChallenge-0.8.jar

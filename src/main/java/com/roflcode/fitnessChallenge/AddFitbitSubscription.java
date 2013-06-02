@@ -113,9 +113,9 @@ public class AddFitbitSubscription implements CustomCodeMethod {
       }
 
       Map<String, Object> returnMap = new HashMap<String, Object>();
-      returnMap.put("added a subscription for subscription ID", subscription.getSubscriptionId());
+      returnMap.put("subscriptionID", subscription.getSubscriptionId());
       returnMap.put("owner", subscription.getOwner().getId());
-      returnMap.put("collection type", subscription.getCollectionType().toString());
+      returnMap.put("collectionType", subscription.getCollectionType().toString());
       returnMap.put("subscriberID", subscription.getSubscriberId());
 
       logger.debug("completed add subscription");
